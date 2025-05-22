@@ -1,8 +1,10 @@
 package ru.nvgsoft.worklist.domain
 
+import androidx.lifecycle.LiveData
+
 interface WorkListRepository {
 
-    fun getWorkList(): List<WorkItem>
+    fun getWorkList(): LiveData<List<WorkItem>>
 
     fun getWorkItem(itemId: Int): WorkItem
 
