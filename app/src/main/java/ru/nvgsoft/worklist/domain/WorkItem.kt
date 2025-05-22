@@ -6,7 +6,7 @@ data class WorkItem(
     val organisation: String,
     val description: String,
     val spendTime: Double,
-    val id: Int = UNDEFINED_ID
+    var id: Int = UNDEFINED_ID
 
 ) {
     companion object{

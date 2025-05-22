@@ -6,6 +6,8 @@ import ru.nvgsoft.worklist.domain.WorkListRepository
 class WorkListRepositoryImpl:WorkListRepository {
     private val workList = mutableListOf<WorkItem>()
 
+    private var autoIncrementId = 0
+
     override fun getWorkList(): List<WorkItem> {
         return workList.toList()
     }
@@ -22,8 +24,13 @@ class WorkListRepositoryImpl:WorkListRepository {
         val itemId = workItem.id
         val oldItem = getWorkItem(itemId)
         workList.remove(oldItem)
+        addWorkItem(workItem)
+    }
+
+    override fun addWorkItem(workItem: WorkItem) {
+        if (workItem.id == WorkItem.UNDEFINED_ID) {
+            workItem.id = autoIncrementId++
+        }
         workList.add(workItem)
-
-
     }
 }

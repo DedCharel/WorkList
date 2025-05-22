@@ -9,4 +9,6 @@ interface WorkListRepository {
     fun deleteWorkItem(workItem: WorkItem)
 
     fun editWorkItem(workItem: WorkItem)
+
+    fun addWorkItem(workItem: WorkItem)
 }
