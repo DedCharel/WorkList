@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.workList.observe(this) {
             Log.d("MainActivity", it.toString())
-            workListAdapter.workList = it
+            workListAdapter.submitList(it)
         }
 
     }
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = workListAdapter.workList[viewHolder.adapterPosition]
+                val item = workListAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteWorkItem(item)
             }
         }
