@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkList"
         tools:targetApi="31">
+        <activity android:name=".presentation.WorkItemActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
