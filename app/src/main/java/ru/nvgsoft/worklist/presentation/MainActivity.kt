@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.nvgsoft.worklist.R
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var workListAdapter: WorkListAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +25,11 @@ class MainActivity : AppCompatActivity() {
             workListAdapter.submitList(it)
         }
 
+        val buttonAdd = findViewById<FloatingActionButton>(R.id.button_add_work_item)
+        buttonAdd.setOnClickListener {
+            val intent = WorkItemActivity.newIntentAdd(this)
+            startActivity(intent)
+        }
     }
 
     private fun setupRecyclerList() {
@@ -33,11 +40,15 @@ class MainActivity : AppCompatActivity() {
         setupSwipeListener(recyclerView)
     }
 
-    private fun setupOnClickListener(){
+    private fun setupOnClickListener() {
         workListAdapter.onWorkItemClickListener = {
             Log.d("MainActivity", it.toString())
+            val intent = WorkItemActivity.newIntentEdit(this, it.id)
+            startActivity(intent)
         }
+
     }
+
     private fun setupSwipeListener(recyclerView: RecyclerView) {
         val callback = object : ItemTouchHelper.SimpleCallback(
             0,
