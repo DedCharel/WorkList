@@ -8,7 +8,7 @@ import ru.nvgsoft.worklist.domain.WorkItem
 
 class MainViewModel : ViewModel() {
 
-    private val repository = WorkListRepositoryImpl() //temp
+    private val repository = WorkListRepositoryImpl //temp
 
     private val getWorkListUseCase = GetWorkLIstUseCase(repository)
     private val deleteWorkItemUSeCase = DeleteWorkItemUSeCase(repository)

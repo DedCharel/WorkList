@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import ru.nvgsoft.worklist.domain.WorkItem
 import ru.nvgsoft.worklist.domain.WorkListRepository
 
-class WorkListRepositoryImpl : WorkListRepository {
-    private val workList = mutableListOf<WorkItem>()
+object WorkListRepositoryImpl : WorkListRepository {
+    private val workList = sortedSetOf<WorkItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
 
     private val listLD = MutableLiveData<List<WorkItem>>()
 

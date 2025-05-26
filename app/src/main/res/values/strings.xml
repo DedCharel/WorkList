@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">WorkList</string>
+    <string name="error_input_date">Error input name</string>
+    <string name="error_input_worker">Error input worker</string>
+    <string name="error_input_organisation">Error input organisation</string>
+    <string name="error_input_spend_time">Error input spend time</string>
 </resources>

@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerList()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.workList.observe(this) {
+
             Log.d("MainActivity", it.toString())
             workListAdapter.submitList(it)
         }
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("MainActivity", it.toString())
             val intent = WorkItemActivity.newIntentEdit(this, it.id)
             startActivity(intent)
+            Log.d("MainActivity", it.toString())
         }
 
     }

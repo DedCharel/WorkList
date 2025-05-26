@@ -1,5 +1,6 @@
 package ru.nvgsoft.worklist.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.nvgsoft.worklist.data.WorkListRepositoryImpl
@@ -10,13 +11,36 @@ import ru.nvgsoft.worklist.domain.WorkItem
 
 class WorkItemViewModel : ViewModel() {
 
-    private val repository = WorkListRepositoryImpl() //temp
+    private val repository = WorkListRepositoryImpl //temp
 
     private val addWorkItemUseCase = AddWorkItemUseCase(repository)
     private val editWorkItemUSeCase = EditWorkItemUSeCase(repository)
     private val getWorkItemUseCase = GetWorkItemUseCase(repository)
 
-    private val workItem = MutableLiveData<WorkItem>()
+    private val _workItem = MutableLiveData<WorkItem>()
+    val workItem: LiveData<WorkItem>
+        get() = _workItem
+
+    private val _errorInputDate = MutableLiveData<Boolean>()
+    val errorInputDate: LiveData<Boolean>
+        get() = _errorInputDate
+
+    private val _errorInputWorker = MutableLiveData<Boolean>()
+    val errorInputWorker: LiveData<Boolean>
+        get() = _errorInputWorker
+
+    private val _errorInputOrganisation = MutableLiveData<Boolean>()
+    val errorInputOrganisation: LiveData<Boolean>
+        get() = _errorInputOrganisation
+
+    private val _errorInputSpendTime = MutableLiveData<Boolean>()
+    val errorInputSpendTime: LiveData<Boolean>
+        get() = _errorInputSpendTime
+
+    private val _shouldCloseScreen = MutableLiveData<Unit>()
+    val shouldCloseScreen: LiveData<Unit>
+        get() = _shouldCloseScreen
+
 
 
     fun addWorkItem(
@@ -41,6 +65,8 @@ class WorkItemViewModel : ViewModel() {
                     spendTime = newSpendTime
                 )
             )
+
+            _shouldCloseScreen.value = Unit
         }
     }
 
@@ -57,7 +83,7 @@ class WorkItemViewModel : ViewModel() {
         val newDescription = description ?: ""
         val newSpendTime = parseSpendTime(spendTime)
         if (validateInputData(newDate, newWorker, newOrganisation, newSpendTime)) {
-            workItem.value?.let {
+            _workItem.value?.let {
                 val item = it.copy(
                             date = newDate,
                             worker = newWorker,
@@ -67,12 +93,28 @@ class WorkItemViewModel : ViewModel() {
                         )
                 editWorkItemUSeCase.editWorkItem(item)
             }
+            _shouldCloseScreen.value = Unit
         }
     }
 
-    private fun getWorkItem(itemId: Int) {
+    fun getWorkItem(itemId: Int) {
         val item = getWorkItemUseCase.getWorkItem(itemId)
-        workItem.value = item
+        _workItem.value = item
+    }
+
+
+    fun resetErrorInputDate(){
+        _errorInputDate.value = false
+    }
+
+    fun resetErrorInputWorker(){
+        _errorInputWorker.value = false
+    }
+    fun resetErrorInputOrganisation(){
+        _errorInputOrganisation.value = false
+    }
+    fun resetErrorInputSpendTime(){
+        _errorInputSpendTime.value = false
     }
 
 
@@ -100,19 +142,19 @@ class WorkItemViewModel : ViewModel() {
     ): Boolean {
         var result = true
         if (date <= 0) {
-            //TODO input date error
+            _errorInputDate.value = true
             result = false
         }
         if (worker.isBlank()) {
-            //TODO input worker error
+            _errorInputWorker.value = true
             result = false
         }
         if (organisation.isBlank()) {
-            //TODO input organisation error
+            _errorInputOrganisation.value = true
             result = false
         }
         if (spendTime <= 0) {
-            ////TODO input spend time error
+            _errorInputSpendTime.value = true
             result = false
         }
         return result
