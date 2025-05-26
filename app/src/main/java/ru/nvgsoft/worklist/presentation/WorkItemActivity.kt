@@ -5,12 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
 import ru.nvgsoft.worklist.R
+import ru.nvgsoft.worklist.utils.convertLongToDate
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class WorkItemActivity : AppCompatActivity() {
 
@@ -134,16 +139,21 @@ class WorkItemActivity : AppCompatActivity() {
         }
     }
 
+
+
     private fun launchEditScreenMode(){
         val workId = intent.getIntExtra(EXTRA_WORK_ITEM_ID, -1)
         viewModel.getWorkItem(workId)
+
         viewModel.workItem.observe(this){
-            etDate.setText(it.date.toString())
+            etDate.setText(convertLongToDate(it.date))
             etWorker.setText(it.worker)
             etOrganisation.setText(it.organisation)
             etDescription.setText(it.description)
             etSpendTime.setText(it.spendTime.toString())
+
         }
+
         btnSave.setOnClickListener {
             viewModel.editWorkItem(
                 date = etDate.text?.toString(),

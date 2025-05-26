@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import ru.nvgsoft.worklist.R
 import ru.nvgsoft.worklist.domain.WorkItem
+import ru.nvgsoft.worklist.utils.convertLongToDate
 
 class WorkListAdapter: ListAdapter<WorkItem, WorkItemViewHolder>(WorkItemDiffCallback()){
 
@@ -20,7 +21,7 @@ class WorkListAdapter: ListAdapter<WorkItem, WorkItemViewHolder>(WorkItemDiffCal
     override fun onBindViewHolder(holder: WorkItemViewHolder, position: Int) {
         val workItem = getItem(position)
         with(holder){
-            tvDate.text = workItem.date.toString()
+            tvDate.text = convertLongToDate( workItem.date)
             tvOrganisation.text = workItem.organisation
             tvWorker.text = workItem.worker
             tvSpendTime.text = workItem.spendTime.toString()

@@ -8,6 +8,7 @@ import ru.nvgsoft.worklist.domain.AddWorkItemUseCase
 import ru.nvgsoft.worklist.domain.EditWorkItemUSeCase
 import ru.nvgsoft.worklist.domain.GetWorkItemUseCase
 import ru.nvgsoft.worklist.domain.WorkItem
+import ru.nvgsoft.worklist.utils.convertDateToLong
 
 class WorkItemViewModel : ViewModel() {
 
@@ -120,7 +121,8 @@ class WorkItemViewModel : ViewModel() {
 
     private fun parseDate(date: String?): Long {
         return try {
-            date?.toLong() ?: 0
+            val dateString = date ?: ""
+            convertDateToLong(dateString)
         } catch (e: Exception) {
             0
         }
