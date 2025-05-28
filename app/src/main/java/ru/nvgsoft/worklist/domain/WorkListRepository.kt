@@ -6,11 +6,11 @@ interface WorkListRepository {
 
     fun getWorkList(): LiveData<List<WorkItem>>
 
-    fun getWorkItem(itemId: Int): WorkItem
+    suspend fun getWorkItem(itemId: Int): WorkItem
 
-    fun deleteWorkItem(workItem: WorkItem)
+    suspend fun deleteWorkItem(workItem: WorkItem)
 
-    fun editWorkItem(workItem: WorkItem)
+    suspend fun editWorkItem(workItem: WorkItem)
 
-    fun addWorkItem(workItem: WorkItem)
+    suspend fun addWorkItem(workItem: WorkItem)
 }

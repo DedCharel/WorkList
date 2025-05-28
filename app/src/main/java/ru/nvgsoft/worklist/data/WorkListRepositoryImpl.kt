@@ -1,63 +1,39 @@
 package ru.nvgsoft.worklist.data
 
+import android.app.Application
 import android.icu.util.Calendar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import ru.nvgsoft.worklist.domain.WorkItem
 import ru.nvgsoft.worklist.domain.WorkListRepository
 
-object WorkListRepositoryImpl : WorkListRepository {
-    private val workList = sortedSetOf<WorkItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
+class WorkListRepositoryImpl(application: Application) : WorkListRepository {
 
-    private val listLD = MutableLiveData<List<WorkItem>>()
-
-    private var autoIncrementId = 0
-
-    init {
-        repeat(10) {
-            addWorkItem(
-                WorkItem(
-                    date = Calendar.getInstance().timeInMillis,
-                    worker = "Worker $it",
-                    organisation = "Organisation $it",
-                    description = "Description $it",
-                    spendTime = it.toDouble()
-                )
-            )
-        }
-    }
+    private val workListDao = AppDatabase.getInstance(application).workListDao()
+    private val mapper = Mapper()
 
     override fun getWorkList(): LiveData<List<WorkItem>> {
-        return listLD
+        return workListDao.getWorkList().map { mapper.mapListDbModelToListEntity(it) }
     }
 
-    override fun getWorkItem(itemId: Int): WorkItem {
-        return workList.find { it.id == itemId }
-            ?: throw RuntimeException("getWorkItem: itemId = null")
+
+    override suspend fun getWorkItem(itemId: Int): WorkItem {
+        val workItemDbModel = workListDao.getWorkItem(itemId)
+        return mapper.mapDbModelToEntity(workItemDbModel)
 
     }
 
-    override fun deleteWorkItem(workItem: WorkItem) {
-        workList.remove(workItem)
-        updateList()
+    override suspend fun deleteWorkItem(workItem: WorkItem) {
+        workListDao.deleteWorkItem(workItem.id)
     }
 
-    override fun editWorkItem(workItem: WorkItem) {
-        val itemId = workItem.id
-        val oldItem = getWorkItem(itemId)
-        workList.remove(oldItem)
-        addWorkItem(workItem)
+    override suspend fun editWorkItem(workItem: WorkItem) {
+        workListDao.addWorkItem(mapper.mapEntityToDbModel(workItem))
     }
 
-    override fun addWorkItem(workItem: WorkItem) {
-        if (workItem.id == WorkItem.UNDEFINED_ID) {
-            workItem.id = autoIncrementId++
-        }
-        workList.add(workItem)
-        updateList()
+    override suspend fun addWorkItem(workItem: WorkItem) {
+       workListDao.addWorkItem(mapper.mapEntityToDbModel(workItem))
     }
 
-    fun updateList(){
-        listLD.value = workList.toList()
-    }
 }

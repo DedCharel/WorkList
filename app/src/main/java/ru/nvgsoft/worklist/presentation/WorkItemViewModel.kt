@@ -1,8 +1,12 @@
 package ru.nvgsoft.worklist.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.nvgsoft.worklist.data.WorkListRepositoryImpl
 import ru.nvgsoft.worklist.domain.AddWorkItemUseCase
 import ru.nvgsoft.worklist.domain.EditWorkItemUSeCase
@@ -10,9 +14,9 @@ import ru.nvgsoft.worklist.domain.GetWorkItemUseCase
 import ru.nvgsoft.worklist.domain.WorkItem
 import ru.nvgsoft.worklist.utils.convertDateToLong
 
-class WorkItemViewModel : ViewModel() {
+class WorkItemViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = WorkListRepositoryImpl //temp
+    private val repository = WorkListRepositoryImpl(application) //temp
 
     private val addWorkItemUseCase = AddWorkItemUseCase(repository)
     private val editWorkItemUSeCase = EditWorkItemUSeCase(repository)
@@ -43,7 +47,6 @@ class WorkItemViewModel : ViewModel() {
         get() = _shouldCloseScreen
 
 
-
     fun addWorkItem(
         date: String?,
         worker: String?,
@@ -57,17 +60,18 @@ class WorkItemViewModel : ViewModel() {
         val newDescription = description ?: ""
         val newSpendTime = parseSpendTime(spendTime)
         if (validateInputData(newDate, newWorker, newOrganisation, newSpendTime)) {
-            addWorkItemUseCase.addWorkItem(
-                WorkItem(
-                    date = newDate,
-                    worker = newWorker,
-                    organisation = newOrganisation,
-                    description = newDescription,
-                    spendTime = newSpendTime
+            viewModelScope.launch {
+                addWorkItemUseCase.addWorkItem(
+                    WorkItem(
+                        date = newDate,
+                        worker = newWorker,
+                        organisation = newOrganisation,
+                        description = newDescription,
+                        spendTime = newSpendTime
+                    )
                 )
-            )
-
-            _shouldCloseScreen.value = Unit
+                _shouldCloseScreen.value = Unit
+            }
         }
     }
 
@@ -85,36 +89,42 @@ class WorkItemViewModel : ViewModel() {
         val newSpendTime = parseSpendTime(spendTime)
         if (validateInputData(newDate, newWorker, newOrganisation, newSpendTime)) {
             _workItem.value?.let {
-                val item = it.copy(
-                            date = newDate,
-                            worker = newWorker,
-                            organisation = newOrganisation,
-                            description = newDescription,
-                            spendTime = newSpendTime
-                        )
-                editWorkItemUSeCase.editWorkItem(item)
+                viewModelScope.launch {
+                    val item = it.copy(
+                        date = newDate,
+                        worker = newWorker,
+                        organisation = newOrganisation,
+                        description = newDescription,
+                        spendTime = newSpendTime
+                    )
+                    editWorkItemUSeCase.editWorkItem(item)
+                    _shouldCloseScreen.value = Unit
+                }
             }
-            _shouldCloseScreen.value = Unit
         }
     }
 
     fun getWorkItem(itemId: Int) {
-        val item = getWorkItemUseCase.getWorkItem(itemId)
-        _workItem.value = item
+        viewModelScope.launch {
+            val item = getWorkItemUseCase.getWorkItem(itemId)
+            _workItem.value = item
+        }
     }
 
 
-    fun resetErrorInputDate(){
+    fun resetErrorInputDate() {
         _errorInputDate.value = false
     }
 
-    fun resetErrorInputWorker(){
+    fun resetErrorInputWorker() {
         _errorInputWorker.value = false
     }
-    fun resetErrorInputOrganisation(){
+
+    fun resetErrorInputOrganisation() {
         _errorInputOrganisation.value = false
     }
-    fun resetErrorInputSpendTime(){
+
+    fun resetErrorInputSpendTime() {
         _errorInputSpendTime.value = false
     }
 
