@@ -19,7 +19,6 @@ import ru.nvgsoft.worklist.utils.convertLongToDate
 class WorkItemFragment: Fragment() {
 
     private lateinit var viewModel:WorkItemViewModel
-    private lateinit var onFragmentFinished: OnFragmentWorkItemFinishedListener
 
     private lateinit var tilDate: TextInputLayout
     private lateinit var etDate: EditText
@@ -35,16 +34,6 @@ class WorkItemFragment: Fragment() {
 
     private var screenMode: String = MODE_UNKNOWN
     private var workId: Int = WorkItem.UNDEFINED_ID
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentWorkItemFinishedListener){
-            onFragmentFinished = context
-        } else {
-            throw RuntimeException("Activity must implement OnEditingFinishedListener")
-        }
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,7 +167,7 @@ class WorkItemFragment: Fragment() {
     }
     private fun observeViewModel(){
         viewModel.shouldCloseScreen.observe(this){
-            onFragmentFinished.onFragmentWorkItemFinished()
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
     private fun launchRightMode(){
@@ -237,9 +226,6 @@ class WorkItemFragment: Fragment() {
     }
 
 
-    interface OnFragmentWorkItemFinishedListener{
-        fun onFragmentWorkItemFinished()
-    }
 
     companion object {
         private const val SCREEN_MODE = "extra_mode"
