@@ -11,18 +11,21 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.nvgsoft.worklist.R
+import ru.nvgsoft.worklist.databinding.FragmentWorkListBinding
 
 class WorkListFragment: Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var workListAdapter: WorkListAdapter
+    private lateinit var binding: FragmentWorkListBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_work_list, container, false)
+        binding = FragmentWorkListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,8 +38,8 @@ class WorkListFragment: Fragment() {
             workListAdapter.submitList(it)
         }
 
-        val buttonAdd = view.findViewById<FloatingActionButton>(R.id.button_add_work_item)
-        buttonAdd.setOnClickListener {
+
+        binding.buttonAddWorkItem.setOnClickListener {
            requireActivity().supportFragmentManager.beginTransaction()
                .replace(R.id.main_container, WorkItemFragment.newInstanceAddItem())
                .addToBackStack(null)
@@ -46,11 +49,11 @@ class WorkListFragment: Fragment() {
 
 
     private fun setupRecyclerList(view: View) {
-        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_work_list)
+
         workListAdapter = WorkListAdapter()
-        recyclerView.adapter = workListAdapter
+        binding.rvWorkList.adapter = workListAdapter
         setupOnClickListener()
-        setupSwipeListener(recyclerView)
+        setupSwipeListener(binding.rvWorkList)
     }
 
     private fun setupOnClickListener() {

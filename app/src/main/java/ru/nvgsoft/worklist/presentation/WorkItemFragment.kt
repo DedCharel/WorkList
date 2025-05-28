@@ -13,24 +13,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
 import ru.nvgsoft.worklist.R
+import ru.nvgsoft.worklist.databinding.FragmentWorkItemBinding
 import ru.nvgsoft.worklist.domain.WorkItem
 import ru.nvgsoft.worklist.utils.convertLongToDate
 
 class WorkItemFragment: Fragment() {
 
     private lateinit var viewModel:WorkItemViewModel
+    private lateinit var binding: FragmentWorkItemBinding
 
-    private lateinit var tilDate: TextInputLayout
-    private lateinit var etDate: EditText
-    private lateinit var tilWorker: TextInputLayout
-    private lateinit var etWorker: EditText
-    private lateinit var tilOrganisation: TextInputLayout
-    private lateinit var etOrganisation: EditText
-    private lateinit var tilDescription: TextInputLayout
-    private lateinit var etDescription: EditText
-    private lateinit var tilSpendTime: TextInputLayout
-    private lateinit var etSpendTime: EditText
-    private lateinit var btnSave: Button
 
     private var screenMode: String = MODE_UNKNOWN
     private var workId: Int = WorkItem.UNDEFINED_ID
@@ -44,21 +35,18 @@ class WorkItemFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        return inflater.inflate(R.layout.fragment_work_item, container, false )
+    ): View {
+        binding = FragmentWorkItemBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[WorkItemViewModel::class.java]
-        initViews(view)
         addTextChangeListeners()
         launchRightMode()
         observeViewModel()
         observeInputError()
-
-
     }
 
     private fun parseParam(){
@@ -80,7 +68,7 @@ class WorkItemFragment: Fragment() {
     }
 
     private fun addTextChangeListeners(){
-        etDate.addTextChangedListener(object: TextWatcher {
+        binding.etDate.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -92,7 +80,7 @@ class WorkItemFragment: Fragment() {
             }
         })
 
-        etWorker.addTextChangedListener(object: TextWatcher {
+        binding.etWorker.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -104,7 +92,7 @@ class WorkItemFragment: Fragment() {
             }
         })
 
-        etOrganisation.addTextChangedListener(object: TextWatcher {
+        binding.etOrganisation.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -116,7 +104,7 @@ class WorkItemFragment: Fragment() {
             }
         })
 
-        etSpendTime.addTextChangedListener(object: TextWatcher {
+        binding.etSpendTime.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -138,7 +126,7 @@ class WorkItemFragment: Fragment() {
             } else {
                 null
             }
-            tilDate.error = message
+            binding.tilDate.error = message
         }
         viewModel.errorInputWorker.observe(this){
             val message = if (it){
@@ -146,7 +134,7 @@ class WorkItemFragment: Fragment() {
             } else {
                 null
             }
-            tilWorker.error = message
+            binding.tilWorker.error = message
         }
         viewModel.errorInputOrganisation.observe(this){
             val message = if (it){
@@ -154,7 +142,7 @@ class WorkItemFragment: Fragment() {
             } else {
                 null
             }
-            tilOrganisation.error = message
+            binding.tilOrganisation.error = message
         }
         viewModel.errorInputSpendTime.observe(this){
             val message = if (it){
@@ -162,7 +150,7 @@ class WorkItemFragment: Fragment() {
             } else {
                 null
             }
-            tilSpendTime.error = message
+            binding.tilSpendTime.error = message
         }
     }
     private fun observeViewModel(){
@@ -179,53 +167,41 @@ class WorkItemFragment: Fragment() {
     private fun launchEditScreenMode(){
         viewModel.getWorkItem(workId)
 
-        viewModel.workItem.observe(this){
+        viewModel.workItem.observe(this) {
+            with(binding) {
             etDate.setText(convertLongToDate(it.date))
             etWorker.setText(it.worker)
             etOrganisation.setText(it.organisation)
             etDescription.setText(it.description)
             etSpendTime.setText(it.spendTime.toString())
-
+            }
         }
-
-        btnSave.setOnClickListener {
-            viewModel.editWorkItem(
-                date = etDate.text?.toString(),
-                worker = etWorker.text?.toString(),
-                organisation = etOrganisation.text?.toString(),
-                description = etDescription.text?.toString(),
-                spendTime = etSpendTime.text?.toString()
-            )
+        with(binding) {
+            btnSave.setOnClickListener {
+                viewModel.editWorkItem(
+                    date = etDate.text?.toString(),
+                    worker = etWorker.text?.toString(),
+                    organisation = etOrganisation.text?.toString(),
+                    description = etDescription.text?.toString(),
+                    spendTime = etSpendTime.text?.toString()
+                )
+            }
         }
 
     }
     private fun launchAddScreenMode(){
-        btnSave.setOnClickListener {
-            viewModel.addWorkItem(
-                date = etDate.text?.toString(),
-                worker = etWorker.text?.toString(),
-                organisation = etOrganisation.text?.toString(),
-                description = etDescription.text?.toString(),
-                spendTime = etSpendTime.text?.toString()
-            )
+        with(binding) {
+            btnSave.setOnClickListener {
+                viewModel.addWorkItem(
+                    date = etDate.text?.toString(),
+                    worker = etWorker.text?.toString(),
+                    organisation = etOrganisation.text?.toString(),
+                    description = etDescription.text?.toString(),
+                    spendTime = etSpendTime.text?.toString()
+                )
+            }
         }
     }
-
-    private fun initViews(view: View) {
-        tilDate = view.findViewById(R.id.til_date)
-        etDate = view.findViewById(R.id.et_date)
-        tilWorker = view.findViewById(R.id.til_worker)
-        etWorker = view.findViewById(R.id.et_worker)
-        tilOrganisation = view.findViewById(R.id.til_organisation)
-        etOrganisation = view.findViewById(R.id.et_organisation)
-        tilDescription = view.findViewById(R.id.til_description)
-        etDescription = view.findViewById(R.id.et_description)
-        tilSpendTime = view.findViewById(R.id.til_spend_time)
-        etSpendTime = view.findViewById(R.id.et_spend_time)
-        btnSave = view.findViewById(R.id.btn_save)
-    }
-
-
 
     companion object {
         private const val SCREEN_MODE = "extra_mode"
