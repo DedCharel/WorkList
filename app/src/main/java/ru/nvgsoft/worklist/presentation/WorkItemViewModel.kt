@@ -13,14 +13,16 @@ import ru.nvgsoft.worklist.domain.EditWorkItemUSeCase
 import ru.nvgsoft.worklist.domain.GetWorkItemUseCase
 import ru.nvgsoft.worklist.domain.WorkItem
 import ru.nvgsoft.worklist.utils.convertDateToLong
+import javax.inject.Inject
 
-class WorkItemViewModel(application: Application) : AndroidViewModel(application) {
+class WorkItemViewModel @Inject constructor(
+    private val addWorkItemUseCase:AddWorkItemUseCase,
+    private val editWorkItemUSeCase: EditWorkItemUSeCase,
+    private val getWorkItemUseCase: GetWorkItemUseCase
+) : ViewModel() {
 
-    private val repository = WorkListRepositoryImpl(application) //temp
 
-    private val addWorkItemUseCase = AddWorkItemUseCase(repository)
-    private val editWorkItemUSeCase = EditWorkItemUSeCase(repository)
-    private val getWorkItemUseCase = GetWorkItemUseCase(repository)
+
 
     private val _workItem = MutableLiveData<WorkItem>()
     val workItem: LiveData<WorkItem>

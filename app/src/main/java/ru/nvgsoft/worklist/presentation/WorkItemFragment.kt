@@ -16,8 +16,16 @@ import ru.nvgsoft.worklist.R
 import ru.nvgsoft.worklist.databinding.FragmentWorkItemBinding
 import ru.nvgsoft.worklist.domain.WorkItem
 import ru.nvgsoft.worklist.utils.convertLongToDate
+import javax.inject.Inject
 
 class WorkItemFragment: Fragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkListApp).component
+    }
 
     private lateinit var viewModel:WorkItemViewModel
     private lateinit var binding: FragmentWorkItemBinding
@@ -26,6 +34,10 @@ class WorkItemFragment: Fragment() {
     private var screenMode: String = MODE_UNKNOWN
     private var workId: Int = WorkItem.UNDEFINED_ID
 
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParam()
@@ -42,7 +54,7 @@ class WorkItemFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[WorkItemViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[WorkItemViewModel::class.java]
         addTextChangeListeners()
         launchRightMode()
         observeViewModel()

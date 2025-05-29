@@ -7,11 +7,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import ru.nvgsoft.worklist.domain.WorkItem
 import ru.nvgsoft.worklist.domain.WorkListRepository
+import javax.inject.Inject
 
-class WorkListRepositoryImpl(application: Application) : WorkListRepository {
+class WorkListRepositoryImpl @Inject constructor(
+    private val workListDao: WorkListDao,
+    private val mapper:Mapper
+    ) : WorkListRepository {
 
-    private val workListDao = AppDatabase.getInstance(application).workListDao()
-    private val mapper = Mapper()
 
     override fun getWorkList(): LiveData<List<WorkItem>> {
         return workListDao.getWorkList().map { mapper.mapListDbModelToListEntity(it) }

@@ -1,5 +1,6 @@
 package ru.nvgsoft.worklist.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,15 +10,27 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.nvgsoft.worklist.R
 import ru.nvgsoft.worklist.databinding.FragmentWorkListBinding
+import javax.inject.Inject
 
 class WorkListFragment: Fragment() {
 
-    private lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private lateinit var viewModel: WorkListViewModel
     private lateinit var workListAdapter: WorkListAdapter
     private lateinit var binding: FragmentWorkListBinding
+
+    private val component by lazy {
+        (requireActivity().application as WorkListApp).component
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,8 +44,8 @@ class WorkListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerList(view)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.workList.observe(this) {
+        viewModel = ViewModelProvider(this, viewModelFactory).get(WorkListViewModel::class.java)
+        viewModel.workList.observe(requireActivity()) {
 
             Log.d("MainActivity", it.toString())
             workListAdapter.submitList(it)

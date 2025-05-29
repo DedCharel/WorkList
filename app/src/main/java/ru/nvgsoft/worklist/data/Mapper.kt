@@ -1,8 +1,9 @@
 package ru.nvgsoft.worklist.data
 
 import ru.nvgsoft.worklist.domain.WorkItem
+import javax.inject.Inject
 
-class Mapper {
+class Mapper @Inject constructor(){
 
     fun mapEntityToDbModel(workItem: WorkItem): WorkItemDbModel {
         return WorkItemDbModel(
