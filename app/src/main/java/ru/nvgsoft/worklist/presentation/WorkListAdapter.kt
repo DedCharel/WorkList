@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import ru.nvgsoft.worklist.R
-import ru.nvgsoft.worklist.domain.WorkItem
+import ru.nvgsoft.worklist.domain.work_list.WorkItem
 import ru.nvgsoft.worklist.utils.convertLongToDate
 
 class WorkListAdapter: ListAdapter<WorkItem, WorkItemViewHolder>(WorkItemDiffCallback()){

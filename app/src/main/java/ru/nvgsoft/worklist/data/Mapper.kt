@@ -1,6 +1,7 @@
 package ru.nvgsoft.worklist.data
 
-import ru.nvgsoft.worklist.domain.WorkItem
+import ru.nvgsoft.worklist.domain.organization.Organization
+import ru.nvgsoft.worklist.domain.work_list.WorkItem
 import javax.inject.Inject
 
 class Mapper @Inject constructor(){
@@ -17,7 +18,7 @@ class Mapper @Inject constructor(){
     }
 
 
-    fun mapDbModelToEntity(dbModel: WorkItemDbModel): WorkItem{
+    fun mapDbModelToEntity(dbModel: WorkItemDbModel): WorkItem {
         return WorkItem(
             id = dbModel.id,
             date = dbModel.date,
@@ -31,4 +32,26 @@ class Mapper @Inject constructor(){
     fun mapListDbModelToListEntity(list: List<WorkItemDbModel>): List<WorkItem>{
         return list.map { mapDbModelToEntity(it) }
     }
+
+    fun mapEntityToDbModel(organization: Organization): OrganizationDbModel {
+        return OrganizationDbModel(
+            id = organization.id,
+            name = organization.name,
+            email = organization.email,
+            phone = organization.phone
+        )
+    }
+
+    fun mapDbModelToEntity(dbModel: OrganizationDbModel): Organization {
+        return Organization(
+            id = dbModel.id,
+            name = dbModel.name,
+            email = dbModel.email,
+            phone = dbModel.phone
+        )
+    }
+    fun mapListDbModelOrganizationToListEntity(list: List<OrganizationDbModel>): List<Organization>{
+        return list.map { mapDbModelToEntity(it) }
+    }
+
 }

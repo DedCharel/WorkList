@@ -1,4 +1,4 @@
-package ru.nvgsoft.worklist.domain
+package ru.nvgsoft.worklist.domain.work_list
 
 data class WorkItem(
     val date: Long,

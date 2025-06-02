@@ -1,22 +1,19 @@
 package ru.nvgsoft.worklist.presentation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.nvgsoft.worklist.data.WorkListRepositoryImpl
-import ru.nvgsoft.worklist.domain.AddWorkItemUseCase
-import ru.nvgsoft.worklist.domain.EditWorkItemUSeCase
-import ru.nvgsoft.worklist.domain.GetWorkItemUseCase
-import ru.nvgsoft.worklist.domain.WorkItem
+import ru.nvgsoft.worklist.domain.work_list.AddWorkItemUseCase
+import ru.nvgsoft.worklist.domain.work_list.EditWorkItemUSeCase
+import ru.nvgsoft.worklist.domain.work_list.GetWorkItemUseCase
+import ru.nvgsoft.worklist.domain.work_list.WorkItem
 import ru.nvgsoft.worklist.utils.convertDateToLong
 import javax.inject.Inject
 
 class WorkItemViewModel @Inject constructor(
-    private val addWorkItemUseCase:AddWorkItemUseCase,
+    private val addWorkItemUseCase: AddWorkItemUseCase,
     private val editWorkItemUSeCase: EditWorkItemUSeCase,
     private val getWorkItemUseCase: GetWorkItemUseCase
 ) : ViewModel() {

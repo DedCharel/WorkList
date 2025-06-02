@@ -1,7 +1,7 @@
 package ru.nvgsoft.worklist.presentation
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.nvgsoft.worklist.domain.WorkItem
+import ru.nvgsoft.worklist.domain.work_list.WorkItem
 
 class WorkItemDiffCallback: DiffUtil.ItemCallback<WorkItem>() {
     override fun areItemsTheSame(oldItem: WorkItem, newItem: WorkItem): Boolean {

@@ -2,7 +2,6 @@ package ru.nvgsoft.worklist.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.nvgsoft.worklist.domain.WorkItem.Companion.UNDEFINED_ID
 
 @Entity(tableName = "work_item")
 data class WorkItemDbModel(

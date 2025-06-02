@@ -7,14 +7,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.textfield.TextInputLayout
 import ru.nvgsoft.worklist.R
 import ru.nvgsoft.worklist.databinding.FragmentWorkItemBinding
-import ru.nvgsoft.worklist.domain.WorkItem
+import ru.nvgsoft.worklist.domain.work_list.WorkItem
 import ru.nvgsoft.worklist.utils.convertLongToDate
 import javax.inject.Inject
 
