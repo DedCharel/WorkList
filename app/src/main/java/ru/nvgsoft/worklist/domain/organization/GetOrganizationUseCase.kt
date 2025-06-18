@@ -1,9 +1,11 @@
 package ru.nvgsoft.worklist.domain.organization
 
-import ru.nvgsoft.worklist.domain.WorkListRepository
+import ru.nvgsoft.worklist.domain.work_list.WorkListRepository
 import javax.inject.Inject
 
-class GetOrganizationUseCase @Inject constructor(private val repository: WorkListRepository) {
+class GetOrganizationUseCase @Inject constructor(
+    private val repository: OrganizationRepository
+) {
 
     suspend fun getOrganization(organizationId: Int): Organization {
         return repository.getOrganization(organizationId)

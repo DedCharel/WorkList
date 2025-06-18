@@ -23,19 +23,6 @@ interface WorkListDao {
     @Query("SELECT * FROM work_item WHERE id=:workItemId LIMIT 1")
     suspend fun getWorkItem(workItemId: Int): WorkItemDbModel
 
-    //ORGANIZATION
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addOrganization(organizationDbModel: OrganizationDbModel)
-
-    @Query("SELECT * FROM organization")
-    fun getOrganizationList(): LiveData<List<OrganizationDbModel>>
-
-    @Query("DELETE FROM organization WHERE id =:organizationId ")
-    suspend fun deleteOrganization(organizationId: Int)
-
-    @Query("SELECT * FROM organization WHERE id=:organizationId LIMIT 1")
-    suspend fun getOrganization(organizationId: Int): OrganizationDbModel
 
 
 

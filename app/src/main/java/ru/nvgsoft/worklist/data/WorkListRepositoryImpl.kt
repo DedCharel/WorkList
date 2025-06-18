@@ -2,9 +2,8 @@ package ru.nvgsoft.worklist.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import ru.nvgsoft.worklist.domain.organization.Organization
 import ru.nvgsoft.worklist.domain.work_list.WorkItem
-import ru.nvgsoft.worklist.domain.WorkListRepository
+import ru.nvgsoft.worklist.domain.work_list.WorkListRepository
 import javax.inject.Inject
 
 class WorkListRepositoryImpl @Inject constructor(
@@ -36,27 +35,6 @@ class WorkListRepositoryImpl @Inject constructor(
        workListDao.addWorkItem(mapper.mapEntityToDbModel(workItem))
     }
 
-    //Organization
 
-    override fun getOrganizationList(): LiveData<List<Organization>> {
-        return workListDao.getOrganizationList().map { mapper.mapListDbModelOrganizationToListEntity(it) }
-    }
-
-    override suspend fun deleteOrganization(organizationId: Int) {
-        workListDao.deleteOrganization(organizationId)
-    }
-
-    override suspend fun getOrganization(organizationId: Int): Organization {
-       val organizationDbModel  = workListDao.getOrganization(organizationId)
-        return mapper.mapDbModelToEntity(organizationDbModel)
-    }
-
-    override suspend fun addOrganization(organization: Organization) {
-        workListDao.addOrganization(mapper.mapEntityToDbModel(organization))
-    }
-
-    override suspend fun editOrganization(organization: Organization) {
-        workListDao.addOrganization(mapper.mapEntityToDbModel(organization))
-    }
 
 }

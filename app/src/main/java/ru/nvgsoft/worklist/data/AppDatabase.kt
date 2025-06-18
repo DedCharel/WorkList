@@ -11,6 +11,7 @@ import androidx.room.RoomDatabase
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun workListDao(): WorkListDao
+    abstract fun organizationDao(): OrganizationDao
 
     companion object{
         private var INSTANCE:AppDatabase? = null
