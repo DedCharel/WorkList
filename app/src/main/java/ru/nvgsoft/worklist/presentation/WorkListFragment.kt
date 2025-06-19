@@ -2,12 +2,14 @@ package ru.nvgsoft.worklist.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.service.chooser.ChooserAction
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.nvgsoft.worklist.R
@@ -53,10 +55,12 @@ class WorkListFragment: Fragment() {
 
 
         binding.buttonAddWorkItem.setOnClickListener {
-           requireActivity().supportFragmentManager.beginTransaction()
-               .replace(R.id.main_container, WorkItemFragment.newInstanceAddItem())
-               .addToBackStack(null)
-               .commit()
+//           requireActivity().supportFragmentManager.beginTransaction()
+//               .replace(R.id.main_container, WorkItemFragment.newInstanceAddItem())
+//               .addToBackStack(null)
+//               .commit()
+
+            findNavController().navigate(WorkListFragmentDirections.actionNavHomeToWorkItemFragment() )
         }
     }
 
@@ -71,11 +75,13 @@ class WorkListFragment: Fragment() {
 
     private fun setupOnClickListener() {
         workListAdapter.onWorkItemClickListener = {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.main_container, WorkItemFragment.newInstanceEditItem(it.id))
-                .addToBackStack(null)
-                .commit()
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.main_container, WorkItemFragment.newInstanceEditItem(it.id))
+//                .addToBackStack(null)
+//                .commit()
+            findNavController().navigate(WorkListFragmentDirections.actionNavHomeToWorkItemFragment("mode_edit", it.id) )
         }
+
 
     }
 

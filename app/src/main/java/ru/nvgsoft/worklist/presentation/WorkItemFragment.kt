@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ru.nvgsoft.worklist.R
 import ru.nvgsoft.worklist.databinding.FragmentWorkItemBinding
 import ru.nvgsoft.worklist.domain.work_list.WorkItem
@@ -129,7 +130,7 @@ class WorkItemFragment: Fragment() {
     }
 
     private fun observeInputError(){
-        viewModel.errorInputDate.observe(this){
+        viewModel.errorInputDate.observe(viewLifecycleOwner){
             val message = if (it){
                 getString(R.string.error_input_date)
             } else {
@@ -137,7 +138,7 @@ class WorkItemFragment: Fragment() {
             }
             binding.tilDate.error = message
         }
-        viewModel.errorInputWorker.observe(this){
+        viewModel.errorInputWorker.observe(viewLifecycleOwner){
             val message = if (it){
                 getString(R.string.error_input_worker)
             } else {
@@ -145,7 +146,7 @@ class WorkItemFragment: Fragment() {
             }
             binding.tilWorker.error = message
         }
-        viewModel.errorInputOrganisation.observe(this){
+        viewModel.errorInputOrganisation.observe(viewLifecycleOwner){
             val message = if (it){
                 getString(R.string.error_input_organisation)
             } else {
@@ -153,7 +154,7 @@ class WorkItemFragment: Fragment() {
             }
             binding.tilOrganisation.error = message
         }
-        viewModel.errorInputSpendTime.observe(this){
+        viewModel.errorInputSpendTime.observe(viewLifecycleOwner){
             val message = if (it){
                 getString(R.string.error_input_spend_time)
             } else {
@@ -163,8 +164,8 @@ class WorkItemFragment: Fragment() {
         }
     }
     private fun observeViewModel(){
-        viewModel.shouldCloseScreen.observe(this){
-            requireActivity().supportFragmentManager.popBackStack()
+        viewModel.shouldCloseScreen.observe(viewLifecycleOwner){
+            findNavController().popBackStack()
         }
     }
     private fun launchRightMode(){
@@ -176,7 +177,7 @@ class WorkItemFragment: Fragment() {
     private fun launchEditScreenMode(){
         viewModel.getWorkItem(workId)
 
-        viewModel.workItem.observe(this) {
+        viewModel.workItem.observe(viewLifecycleOwner) {
             with(binding) {
             etDate.setText(convertLongToDate(it.date))
             etWorker.setText(it.worker)
@@ -219,23 +220,6 @@ class WorkItemFragment: Fragment() {
         private const val MODE_EDIT = "mode_edit"
         private const val MODE_UNKNOWN = ""
 
-
-        fun newInstanceAddItem(): WorkItemFragment{
-            return WorkItemFragment().apply {
-                arguments = Bundle().apply {
-                    putString(SCREEN_MODE, MODE_ADD)
-                }
-            }
-        }
-
-        fun newInstanceEditItem(itemId: Int): WorkItemFragment{
-            return WorkItemFragment().apply {
-                arguments = Bundle().apply {
-                    putString(SCREEN_MODE, MODE_EDIT)
-                    putInt(WORK_ITEM_ID, itemId)
-                }
-            }
-        }
 
     }
 }

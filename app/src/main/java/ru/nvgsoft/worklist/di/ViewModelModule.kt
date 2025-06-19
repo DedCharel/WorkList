@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.nvgsoft.worklist.presentation.WorkListViewModel
 import ru.nvgsoft.worklist.presentation.WorkItemViewModel
+import ru.nvgsoft.worklist.presentation.organization.OrganizationListViewModel
 
 @Module
 interface ViewModelModule {
@@ -19,5 +20,10 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(WorkListViewModel::class)
     fun bindWorkListViewModel(viewmodel: WorkListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OrganizationListViewModel::class)
+    fun bindOrganizationListViewModel(viewmodel: OrganizationListViewModel): ViewModel
 
 }

@@ -5,6 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import ru.nvgsoft.worklist.presentation.WorkItemFragment
 import ru.nvgsoft.worklist.presentation.WorkListFragment
+import ru.nvgsoft.worklist.presentation.organization.OrganizationListFragment
 
 @ApplicationScope
 @Component(
@@ -18,6 +19,8 @@ interface ApplicationComponent {
     fun inject(fragment: WorkListFragment)
 
     fun inject(fragment: WorkItemFragment)
+
+    fun inject(fragment: OrganizationListFragment)
 
     @Component.Factory
     interface Factory {
