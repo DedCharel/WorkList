@@ -19,15 +19,9 @@ class WorkItemViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-
-
     private val _workItem = MutableLiveData<WorkItem>()
     val workItem: LiveData<WorkItem>
         get() = _workItem
-
-    private val _errorInputDate = MutableLiveData<Boolean>()
-    val errorInputDate: LiveData<Boolean>
-        get() = _errorInputDate
 
     private val _errorInputWorker = MutableLiveData<Boolean>()
     val errorInputWorker: LiveData<Boolean>
@@ -111,10 +105,6 @@ class WorkItemViewModel @Inject constructor(
     }
 
 
-    fun resetErrorInputDate() {
-        _errorInputDate.value = false
-    }
-
     fun resetErrorInputWorker() {
         _errorInputWorker.value = false
     }
@@ -152,10 +142,6 @@ class WorkItemViewModel @Inject constructor(
         spendTime: Double
     ): Boolean {
         var result = true
-        if (date <= 0) {
-            _errorInputDate.value = true
-            result = false
-        }
         if (worker.isBlank()) {
             _errorInputWorker.value = true
             result = false

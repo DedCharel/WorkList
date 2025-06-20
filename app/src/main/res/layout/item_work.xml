@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="16dp"
+            android:textColor="@color/black"
             android:textStyle="bold"
             tools:text="01.01.25"
             android:layout_margin="8dp"/>
@@ -37,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 tools:text="ООО Рога и копыта"
                 android:layout_marginBottom="4dp"/>
@@ -45,6 +47,7 @@
                 android:id="@+id/tv_worker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
 
                 tools:text="Иванов И.И." />
 
@@ -56,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textColor="@color/black"
             android:textSize="16dp"
             android:textStyle="bold"
             android:layout_margin="8dp"

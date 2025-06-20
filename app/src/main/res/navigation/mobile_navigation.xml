@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="ru.nvgsoft.worklist.presentation.WorkListFragment"
-        android:label="fragment_work_list"
+        android:label="My work"
         tools:layout="@layout/fragment_work_list" >
         <action
             android:id="@+id/action_nav_home_to_workItemFragment"
@@ -19,11 +19,11 @@
     <fragment
         android:id="@+id/nav_organization"
         android:name="ru.nvgsoft.worklist.presentation.organization.OrganizationListFragment"
-        android:label="OrganizationListFragment" />
+        android:label="Organization" />
     <fragment
         android:id="@+id/workItemFragment"
         android:name="ru.nvgsoft.worklist.presentation.WorkItemFragment"
-        android:label="WorkItemFragment" >
+        android:label="Work" >
         <argument
             android:name="extra_mode"
             app:argType="string"

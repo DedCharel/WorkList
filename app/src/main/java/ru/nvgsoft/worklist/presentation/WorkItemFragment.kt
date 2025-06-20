@@ -1,5 +1,6 @@
 package ru.nvgsoft.worklist.presentation
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -14,9 +15,12 @@ import ru.nvgsoft.worklist.R
 import ru.nvgsoft.worklist.databinding.FragmentWorkItemBinding
 import ru.nvgsoft.worklist.domain.work_list.WorkItem
 import ru.nvgsoft.worklist.utils.convertLongToDate
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
-class WorkItemFragment: Fragment() {
+class WorkItemFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -25,8 +29,10 @@ class WorkItemFragment: Fragment() {
         (requireActivity().application as WorkListApp).component
     }
 
-    private lateinit var viewModel:WorkItemViewModel
+    private lateinit var viewModel: WorkItemViewModel
     private lateinit var binding: FragmentWorkItemBinding
+    private lateinit var calendar: Calendar
+    private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
 
 
     private var screenMode: String = MODE_UNKNOWN
@@ -36,6 +42,7 @@ class WorkItemFragment: Fragment() {
         component.inject(this)
         super.onAttach(context)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParam()
@@ -54,43 +61,58 @@ class WorkItemFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, viewModelFactory)[WorkItemViewModel::class.java]
         addTextChangeListeners()
+        initDatePicker()
         launchRightMode()
         observeViewModel()
         observeInputError()
     }
 
-    private fun parseParam(){
-        val args =  requireArguments()
+    private fun initDatePicker() {
+
+        calendar = Calendar.getInstance()
+
+        dateSetListener =
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, monthOfYear)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                val myFormat = "dd.MM.yyyy" // mention the format you need
+                val sdf = SimpleDateFormat(myFormat, Locale.US)
+                binding.tvDate.text = sdf.format(calendar.time)
+            }
+
+        binding.tvDate.setOnClickListener {
+            DatePickerDialog(
+                requireActivity(), dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+    }
+
+    private fun parseParam() {
+        val args = requireArguments()
         if (!args.containsKey(SCREEN_MODE)) {
             throw RuntimeException("Param screen mode is absent")
         }
         val mode = args.getString(SCREEN_MODE)
         if (mode != MODE_ADD && mode != MODE_EDIT) {
-            throw  RuntimeException("Unknown screen mode $mode")
+            throw RuntimeException("Unknown screen mode $mode")
         }
         screenMode = mode
         if (screenMode == MODE_EDIT) {
-            if (!args.containsKey(WORK_ITEM_ID)){
+            if (!args.containsKey(WORK_ITEM_ID)) {
                 throw RuntimeException("Params work item id is absent")
             }
             workId = args.getInt(WORK_ITEM_ID, WorkItem.UNDEFINED_ID)
         }
     }
 
-    private fun addTextChangeListeners(){
-        binding.etDate.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+    private fun addTextChangeListeners() {
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputDate()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
-
-        binding.etWorker.addTextChangedListener(object: TextWatcher {
+        binding.etWorker.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -102,7 +124,7 @@ class WorkItemFragment: Fragment() {
             }
         })
 
-        binding.etOrganisation.addTextChangedListener(object: TextWatcher {
+        binding.etOrganisation.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -114,7 +136,7 @@ class WorkItemFragment: Fragment() {
             }
         })
 
-        binding.etSpendTime.addTextChangedListener(object: TextWatcher {
+        binding.etSpendTime.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -129,33 +151,26 @@ class WorkItemFragment: Fragment() {
 
     }
 
-    private fun observeInputError(){
-        viewModel.errorInputDate.observe(viewLifecycleOwner){
-            val message = if (it){
-                getString(R.string.error_input_date)
-            } else {
-                null
-            }
-            binding.tilDate.error = message
-        }
-        viewModel.errorInputWorker.observe(viewLifecycleOwner){
-            val message = if (it){
+    private fun observeInputError() {
+
+        viewModel.errorInputWorker.observe(viewLifecycleOwner) {
+            val message = if (it) {
                 getString(R.string.error_input_worker)
             } else {
                 null
             }
             binding.tilWorker.error = message
         }
-        viewModel.errorInputOrganisation.observe(viewLifecycleOwner){
-            val message = if (it){
+        viewModel.errorInputOrganisation.observe(viewLifecycleOwner) {
+            val message = if (it) {
                 getString(R.string.error_input_organisation)
             } else {
                 null
             }
             binding.tilOrganisation.error = message
         }
-        viewModel.errorInputSpendTime.observe(viewLifecycleOwner){
-            val message = if (it){
+        viewModel.errorInputSpendTime.observe(viewLifecycleOwner) {
+            val message = if (it) {
                 getString(R.string.error_input_spend_time)
             } else {
                 null
@@ -163,33 +178,39 @@ class WorkItemFragment: Fragment() {
             binding.tilSpendTime.error = message
         }
     }
-    private fun observeViewModel(){
-        viewModel.shouldCloseScreen.observe(viewLifecycleOwner){
+
+    private fun observeViewModel() {
+        viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
         }
     }
-    private fun launchRightMode(){
-        when (screenMode){
+
+    private fun launchRightMode() {
+        when (screenMode) {
             MODE_EDIT -> launchEditScreenMode()
             MODE_ADD -> launchAddScreenMode()
         }
     }
-    private fun launchEditScreenMode(){
+
+    private fun launchEditScreenMode() {
         viewModel.getWorkItem(workId)
 
+
         viewModel.workItem.observe(viewLifecycleOwner) {
+            calendar.timeInMillis = it.date
             with(binding) {
-            etDate.setText(convertLongToDate(it.date))
-            etWorker.setText(it.worker)
-            etOrganisation.setText(it.organisation)
-            etDescription.setText(it.description)
-            etSpendTime.setText(it.spendTime.toString())
+                tvDate.text = convertLongToDate(it.date)
+                etWorker.setText(it.worker)
+                etOrganisation.setText(it.organisation)
+                etDescription.setText(it.description)
+                etSpendTime.setText(it.spendTime.toString())
             }
         }
         with(binding) {
+
             btnSave.setOnClickListener {
                 viewModel.editWorkItem(
-                    date = etDate.text?.toString(),
+                    date = tvDate.text?.toString(),
                     worker = etWorker.text?.toString(),
                     organisation = etOrganisation.text?.toString(),
                     description = etDescription.text?.toString(),
@@ -199,11 +220,13 @@ class WorkItemFragment: Fragment() {
         }
 
     }
-    private fun launchAddScreenMode(){
+
+    private fun launchAddScreenMode() {
         with(binding) {
+            tvDate.text = SimpleDateFormat("dd.MM.yyyy").format(System.currentTimeMillis())
             btnSave.setOnClickListener {
                 viewModel.addWorkItem(
-                    date = etDate.text?.toString(),
+                    date = tvDate.text?.toString(),
                     worker = etWorker.text?.toString(),
                     organisation = etOrganisation.text?.toString(),
                     description = etDescription.text?.toString(),
