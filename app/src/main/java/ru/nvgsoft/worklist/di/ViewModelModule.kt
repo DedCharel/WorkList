@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import ru.nvgsoft.worklist.presentation.WorkListViewModel
-import ru.nvgsoft.worklist.presentation.WorkItemViewModel
+import ru.nvgsoft.worklist.presentation.organization.OrganizationItemViewModel
+import ru.nvgsoft.worklist.presentation.work.WorkListViewModel
+import ru.nvgsoft.worklist.presentation.work.WorkItemViewModel
 import ru.nvgsoft.worklist.presentation.organization.OrganizationListViewModel
 
 @Module
@@ -25,5 +26,10 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(OrganizationListViewModel::class)
     fun bindOrganizationListViewModel(viewmodel: OrganizationListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OrganizationItemViewModel::class)
+    fun bindOrganizationItemViewModel(viewmodel: OrganizationItemViewModel): ViewModel
 
 }

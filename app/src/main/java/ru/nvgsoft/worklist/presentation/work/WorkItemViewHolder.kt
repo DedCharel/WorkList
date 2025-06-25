@@ -1,4 +1,4 @@
-package ru.nvgsoft.worklist.presentation
+package ru.nvgsoft.worklist.presentation.work
 
 import android.view.View
 import android.widget.TextView

@@ -1,8 +1,7 @@
-package ru.nvgsoft.worklist.presentation
+package ru.nvgsoft.worklist.presentation.work
 
 import android.content.Context
 import android.os.Bundle
-import android.service.chooser.ChooserAction
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import ru.nvgsoft.worklist.R
 import ru.nvgsoft.worklist.databinding.FragmentWorkListBinding
+import ru.nvgsoft.worklist.presentation.ViewModelFactory
+import ru.nvgsoft.worklist.presentation.WorkListApp
 import javax.inject.Inject
 
 class WorkListFragment: Fragment() {
@@ -109,7 +109,7 @@ class WorkListFragment: Fragment() {
 
     companion object{
 
-        fun newInstance(): WorkListFragment{
+        fun newInstance(): WorkListFragment {
           return WorkListFragment()
         }
     }

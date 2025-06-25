@@ -3,8 +3,9 @@ package ru.nvgsoft.worklist.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import ru.nvgsoft.worklist.presentation.WorkItemFragment
-import ru.nvgsoft.worklist.presentation.WorkListFragment
+import ru.nvgsoft.worklist.presentation.organization.OrganizationItemFragment
+import ru.nvgsoft.worklist.presentation.work.WorkItemFragment
+import ru.nvgsoft.worklist.presentation.work.WorkListFragment
 import ru.nvgsoft.worklist.presentation.organization.OrganizationListFragment
 
 @ApplicationScope
@@ -21,6 +22,8 @@ interface ApplicationComponent {
     fun inject(fragment: WorkItemFragment)
 
     fun inject(fragment: OrganizationListFragment)
+
+    fun inject(fragment: OrganizationItemFragment)
 
     @Component.Factory
     interface Factory {

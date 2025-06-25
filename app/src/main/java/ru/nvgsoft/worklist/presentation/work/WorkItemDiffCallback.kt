@@ -1,4 +1,4 @@
-package ru.nvgsoft.worklist.presentation
+package ru.nvgsoft.worklist.presentation.work
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.nvgsoft.worklist.domain.work_list.WorkItem

@@ -1,4 +1,4 @@
-package ru.nvgsoft.worklist.presentation
+package ru.nvgsoft.worklist.presentation.work
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package ru.nvgsoft.worklist.presentation
+package ru.nvgsoft.worklist.presentation.work
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import ru.nvgsoft.worklist.R
 import ru.nvgsoft.worklist.databinding.FragmentWorkItemBinding
 import ru.nvgsoft.worklist.domain.work_list.WorkItem
+import ru.nvgsoft.worklist.presentation.ViewModelFactory
+import ru.nvgsoft.worklist.presentation.WorkListApp
 import ru.nvgsoft.worklist.utils.convertLongToDate
 import java.text.SimpleDateFormat
 import java.util.Calendar

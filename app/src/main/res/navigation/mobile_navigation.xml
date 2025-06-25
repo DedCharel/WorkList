@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="ru.nvgsoft.worklist.presentation.WorkListFragment"
+        android:name="ru.nvgsoft.worklist.presentation.work.WorkListFragment"
         android:label="My work"
         tools:layout="@layout/fragment_work_list" >
         <action
@@ -19,10 +19,16 @@
     <fragment
         android:id="@+id/nav_organization"
         android:name="ru.nvgsoft.worklist.presentation.organization.OrganizationListFragment"
-        android:label="Organization" />
+        android:label="Organization" >
+        <action
+            android:id="@+id/action_nav_organization_to_organizationItemFragment"
+            app:destination="@id/organizationItemFragment"
+            app:popUpTo="@id/nav_organization"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/workItemFragment"
-        android:name="ru.nvgsoft.worklist.presentation.WorkItemFragment"
+        android:name="ru.nvgsoft.worklist.presentation.work.WorkItemFragment"
         android:label="Work" >
         <argument
             android:name="extra_mode"
@@ -32,5 +38,18 @@
             android:name="extra_work_item_id"
             app:argType="integer"
             android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/organizationItemFragment"
+        android:name="ru.nvgsoft.worklist.presentation.organization.OrganizationItemFragment"
+        android:label="Organization" >
+    <argument
+        android:name="extra_mode"
+        app:argType="string"
+        android:defaultValue="mode_add" />
+    <argument
+        android:name="extra_organization_id"
+        app:argType="integer"
+        android:defaultValue="-1" />
     </fragment>
 </navigation>
